@@ -221,7 +221,9 @@
         border-radius: 0.55rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background 0.2s ease, transform 0.2s ease;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
       }
 
       .quick-start-form button:hover,
@@ -304,7 +306,10 @@
       <section>
         <h2>Quick Start</h2>
         <p>
-          Place a single <code>&lt;script&gt;</code> tag and configure the overlay directly in its URL. Paste your image below, tweak any of the fields, and click <em>Update examples</em> to refresh the demo and snippet.
+          Place a single <code>&lt;script&gt;</code> tag and configure the
+          overlay directly in its URL. Paste your image below, tweak any of the
+          fields, and click <em>Update examples</em> to refresh the demo and
+          snippet.
         </p>
         <form id="watermark-form" class="quick-start-form">
           <div class="quick-start-field full-width">
@@ -313,7 +318,7 @@
               id="watermark-url"
               name="watermark-url"
               type="text"
-              placeholder="https://example.com/watermark.png"
+              placeholder="https://watermark.wasmer.app/watermark.png"
               value="watermark.png"
               spellcheck="false"
               autocomplete="off"
@@ -373,15 +378,26 @@
               value="page-demo"
             />
           </div>
-          <button type="submit" class="quick-start-submit">Update examples</button>
+          <button type="submit" class="quick-start-submit">
+            Update examples
+          </button>
         </form>
         <div class="quick-start-snippet">
           <pre><code id="script-snippet"></code></pre>
-          <button type="button" class="copy-button" id="copy-script">Copy script tag</button>
-          <span class="copy-feedback" id="copy-feedback" role="status" aria-live="polite">Copied!</span>
+          <button type="button" class="copy-button" id="copy-script">
+            Copy script tag
+          </button>
+          <span
+            class="copy-feedback"
+            id="copy-feedback"
+            role="status"
+            aria-live="polite"
+            >Copied!</span
+          >
         </div>
         <p>
-          The script finds the parameters on its own, downloads the image, and anchors it to the chosen corner.
+          The script finds the parameters on its own, downloads the image, and
+          anchors it to the chosen corner.
         </p>
       </section>
 
@@ -460,7 +476,9 @@
           different parameters.
         </p>
         <p>
-          They default to the local <code>watermark.png</code> asset but will update whenever you change the URL above, so you can preview your own artwork offline.
+          They default to the local <code>watermark.png</code> asset but will
+          update whenever you change the URL above, so you can preview your own
+          artwork offline.
         </p>
         <div class="demo-grid">
           <article class="demo-card">
@@ -519,28 +537,41 @@
 
     <script>
       (function () {
-        const defaultUrl = 'watermark.png';
+        const defaultUrl = "watermark.png";
         const defaults = {
           url: defaultUrl,
-          position: 'SE',
-          margin: '24',
-          maxWidth: '220',
-          maxHeight: '240',
-          id: 'page-demo',
+          position: "SE",
+          margin: "24",
+          maxWidth: "220",
+          maxHeight: "240",
+          id: "page-demo",
         };
-        const allowedPositions = new Set(['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'CENTER', 'C']);
+        const allowedPositions = new Set([
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW",
+          "CENTER",
+          "C",
+        ]);
 
-        const form = document.getElementById('watermark-form');
-        const urlInput = document.getElementById('watermark-url');
-        const positionInput = document.getElementById('watermark-position');
-        const marginInput = document.getElementById('watermark-margin');
-        const maxWidthInput = document.getElementById('watermark-max-width');
-        const maxHeightInput = document.getElementById('watermark-max-height');
-        const idInput = document.getElementById('watermark-id');
-        const snippetEl = document.getElementById('script-snippet');
-        const copyButton = document.getElementById('copy-script');
-        const copyFeedback = document.getElementById('copy-feedback');
-        const demoFrames = Array.from(document.querySelectorAll('[data-watermark-demo]'));
+        const form = document.getElementById("watermark-form");
+        const urlInput = document.getElementById("watermark-url");
+        const positionInput = document.getElementById("watermark-position");
+        const marginInput = document.getElementById("watermark-margin");
+        const maxWidthInput = document.getElementById("watermark-max-width");
+        const maxHeightInput = document.getElementById("watermark-max-height");
+        const idInput = document.getElementById("watermark-id");
+        const snippetEl = document.getElementById("script-snippet");
+        const copyButton = document.getElementById("copy-script");
+        const copyFeedback = document.getElementById("copy-feedback");
+        const demoFrames = Array.from(
+          document.querySelectorAll("[data-watermark-demo]"),
+        );
 
         if (
           !form ||
@@ -557,37 +588,39 @@
           return;
         }
 
-        let latestSnippet = '';
+        let latestSnippet = "";
         let copyTimer = null;
         let pageScript = null;
         let currentOverlayId = defaults.id;
-        const closingScript = '</scr' + 'ipt>';
+        const closingScript = "</scr" + "ipt>";
 
         function sanitizeUrl(value) {
-          const trimmed = String(value || '').trim();
+          const trimmed = String(value || "").trim();
           return trimmed || defaultUrl;
         }
 
         function sanitizePosition(value) {
-          const trimmed = String(value || '').trim().toUpperCase();
+          const trimmed = String(value || "")
+            .trim()
+            .toUpperCase();
           if (!trimmed) return defaults.position;
-          if (trimmed === 'C') return 'CENTER';
+          if (trimmed === "C") return "CENTER";
           if (allowedPositions.has(trimmed)) {
-            return trimmed === 'CENTER' ? 'CENTER' : trimmed;
+            return trimmed === "CENTER" ? "CENTER" : trimmed;
           }
           return defaults.position;
         }
 
         function sanitizeLength(value, fallback, allowEmpty) {
-          const trimmed = String(value || '').trim();
+          const trimmed = String(value || "").trim();
           if (!trimmed) {
-            return allowEmpty ? '' : fallback;
+            return allowEmpty ? "" : fallback;
           }
           return trimmed;
         }
 
         function sanitizeId(value, fallback) {
-          const trimmed = String(value || '').trim();
+          const trimmed = String(value || "").trim();
           return trimmed || fallback;
         }
 
@@ -596,8 +629,16 @@
             url: sanitizeUrl(urlInput.value),
             position: sanitizePosition(positionInput.value),
             margin: sanitizeLength(marginInput.value, defaults.margin, false),
-            maxWidth: sanitizeLength(maxWidthInput.value, defaults.maxWidth, false),
-            maxHeight: sanitizeLength(maxHeightInput.value, defaults.maxHeight, true),
+            maxWidth: sanitizeLength(
+              maxWidthInput.value,
+              defaults.maxWidth,
+              false,
+            ),
+            maxHeight: sanitizeLength(
+              maxHeightInput.value,
+              defaults.maxHeight,
+              true,
+            ),
             id: sanitizeId(idInput.value, defaults.id),
           };
         }
@@ -607,33 +648,33 @@
           positionInput.value = values.position;
           marginInput.value = values.margin;
           maxWidthInput.value = values.maxWidth;
-          maxHeightInput.value = values.maxHeight || '';
+          maxHeightInput.value = values.maxHeight || "";
           idInput.value = values.id;
         }
 
         function buildScriptSrc(imageUrl, entries) {
           const params = new URLSearchParams();
           entries.forEach(([key, value]) => {
-            if (value !== '' && value != null) {
+            if (value !== "" && value != null) {
               params.set(key, value);
             }
           });
-          params.set('url', imageUrl);
+          params.set("url", imageUrl);
           return `watermark.js?${params.toString()}`;
         }
 
         function buildQuickStartEntries(values) {
           const entries = [];
           const push = (key, value) => {
-            if (value !== '' && value != null) {
+            if (value !== "" && value != null) {
               entries.push([key, value]);
             }
           };
-          push('position', values.position);
-          push('margin', values.margin);
-          push('max-width', values.maxWidth);
-          push('max-height', values.maxHeight);
-          push('id', values.id);
+          push("position", values.position);
+          push("margin", values.margin);
+          push("max-width", values.maxWidth);
+          push("max-height", values.maxHeight);
+          push("id", values.id);
           return entries;
         }
 
@@ -641,16 +682,16 @@
           const str = String(value);
           return str.replace(/[&"'<>]/g, (char) => {
             switch (char) {
-              case '&':
-                return '&amp;';
+              case "&":
+                return "&amp;";
               case '"':
-                return '&quot;';
+                return "&quot;";
               case "'":
-                return '&#39;';
-              case '<':
-                return '&lt;';
-              case '>':
-                return '&gt;';
+                return "&#39;";
+              case "<":
+                return "&lt;";
+              case ">":
+                return "&gt;";
               default:
                 return char;
             }
@@ -661,12 +702,12 @@
           const str = String(value);
           return str.replace(/[&<>]/g, (char) => {
             switch (char) {
-              case '&':
-                return '&amp;';
-              case '<':
-                return '&lt;';
-              case '>':
-                return '&gt;';
+              case "&":
+                return "&amp;";
+              case "<":
+                return "&lt;";
+              case ">":
+                return "&gt;";
               default:
                 return char;
             }
@@ -674,14 +715,17 @@
         }
 
         function setSnippet(values) {
-          const scriptSrc = buildScriptSrc(values.url, buildQuickStartEntries(values));
-          latestSnippet = `<script src="${scriptSrc}">${closingScript}`;
+          const scriptSrc = buildScriptSrc(
+            values.url,
+            buildQuickStartEntries(values),
+          );
+          latestSnippet = `<script src="https://watermark.wasmer.app/${scriptSrc}">${closingScript}`;
           snippetEl.textContent = latestSnippet;
           if (copyTimer) {
             window.clearTimeout(copyTimer);
             copyTimer = null;
           }
-          copyFeedback.classList.remove('is-visible');
+          copyFeedback.classList.remove("is-visible");
         }
 
         function buildFrameDoc(headline, detailText, scriptSrc) {
@@ -694,23 +738,30 @@
 
         function updateFrames(values) {
           demoFrames.forEach((frame) => {
-            const { id, position, margin, maxWidth, maxHeight, description } = frame.dataset;
+            const { id, position, margin, maxWidth, maxHeight, description } =
+              frame.dataset;
             const resolvedPosition = position || values.position;
             const resolvedMargin = margin || values.margin;
             const resolvedMaxWidth = maxWidth || values.maxWidth;
             const resolvedMaxHeight = maxHeight || values.maxHeight;
-            const frameId = id || values.id || `demo-${Math.random().toString(36).slice(2, 8)}`;
+            const frameId =
+              id ||
+              values.id ||
+              `demo-${Math.random().toString(36).slice(2, 8)}`;
             const params = [];
 
-            if (resolvedPosition) params.push(['position', resolvedPosition]);
-            if (resolvedMargin) params.push(['margin', resolvedMargin]);
-            if (resolvedMaxWidth) params.push(['max-width', resolvedMaxWidth]);
-            if (resolvedMaxHeight) params.push(['max-height', resolvedMaxHeight]);
-            params.push(['id', frameId]);
+            if (resolvedPosition) params.push(["position", resolvedPosition]);
+            if (resolvedMargin) params.push(["margin", resolvedMargin]);
+            if (resolvedMaxWidth) params.push(["max-width", resolvedMaxWidth]);
+            if (resolvedMaxHeight)
+              params.push(["max-height", resolvedMaxHeight]);
+            params.push(["id", frameId]);
 
             const scriptSrc = buildScriptSrc(values.url, params);
-            const detailText = description || 'default settings';
-            const headline = resolvedPosition ? `position=${resolvedPosition}` : 'watermark demo';
+            const detailText = description || "default settings";
+            const headline = resolvedPosition
+              ? `position=${resolvedPosition}`
+              : "watermark demo";
 
             frame.srcdoc = buildFrameDoc(headline, detailText, scriptSrc);
           });
@@ -719,11 +770,11 @@
         function mountPageWatermark(values) {
           const overlayId = values.id || defaults.id;
           const entries = [];
-          entries.push(['position', values.position]);
-          entries.push(['margin', values.margin]);
-          if (values.maxWidth) entries.push(['max-width', values.maxWidth]);
-          if (values.maxHeight) entries.push(['max-height', values.maxHeight]);
-          entries.push(['id', overlayId]);
+          entries.push(["position", values.position]);
+          entries.push(["margin", values.margin]);
+          if (values.maxWidth) entries.push(["max-width", values.maxWidth]);
+          if (values.maxHeight) entries.push(["max-height", values.maxHeight]);
+          entries.push(["id", overlayId]);
 
           const scriptSrc = buildScriptSrc(values.url, entries);
 
@@ -744,9 +795,9 @@
             existing.parentNode.removeChild(existing);
           }
 
-          const script = document.createElement('script');
+          const script = document.createElement("script");
           script.src = scriptSrc;
-          script.dataset.pageDemo = 'true';
+          script.dataset.pageDemo = "true";
           document.body.appendChild(script);
           pageScript = script;
           currentOverlayId = overlayId;
@@ -767,10 +818,10 @@
         }
 
         function showCopyFeedback() {
-          copyFeedback.classList.add('is-visible');
+          copyFeedback.classList.add("is-visible");
           if (copyTimer) window.clearTimeout(copyTimer);
           copyTimer = window.setTimeout(() => {
-            copyFeedback.classList.remove('is-visible');
+            copyFeedback.classList.remove("is-visible");
           }, 2000);
         }
 
@@ -779,7 +830,7 @@
             window.clearTimeout(copyTimer);
             copyTimer = null;
           }
-          copyFeedback.classList.remove('is-visible');
+          copyFeedback.classList.remove("is-visible");
         }
 
         function fallbackCopy() {
@@ -790,9 +841,12 @@
           selection.removeAllRanges();
           selection.addRange(range);
           try {
-            document.execCommand('copy');
+            document.execCommand("copy");
           } catch (err) {
-            console.warn('[watermark] Unable to copy snippet automatically.', err);
+            console.warn(
+              "[watermark] Unable to copy snippet automatically.",
+              err,
+            );
           }
           selection.removeAllRanges();
           showCopyFeedback();
@@ -822,16 +876,16 @@
           idInput,
         ];
 
-        form.addEventListener('submit', handleSubmit);
+        form.addEventListener("submit", handleSubmit);
         formControls.forEach((control) => {
-          control.addEventListener('input', clearCopyFeedback);
-          control.addEventListener('change', clearCopyFeedback);
+          control.addEventListener("input", clearCopyFeedback);
+          control.addEventListener("change", clearCopyFeedback);
         });
-        copyButton.addEventListener('click', handleCopy);
+        copyButton.addEventListener("click", handleCopy);
 
         const initialValues = updateAll();
         applyFormValues(initialValues);
-      }());
+      })();
     </script>
   </body>
 </html>
