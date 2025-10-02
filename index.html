@@ -3,7 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>watermark.js – Demo & Guide</title>
+    <title>watermark.js – JavaScript Watermark Overlay Demo & Guide</title>
+    <meta
+      name="description"
+      content="watermark.js is a lightweight JavaScript watermark overlay script that sticks custom images onto any webpage with simple URL parameters."
+    />
+    <meta
+      name="keywords"
+      content="watermark.js, JavaScript watermark, image watermark overlay, browser watermark script"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://watermark.wasmer.app/" />
+    <link rel="icon" href="favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="watermark.js – JavaScript Watermark Overlay"
+    />
+    <meta
+      property="og:description"
+      content="Add image watermarks to any webpage with a single script tag. Configure the position, margin, and size using URL query parameters."
+    />
+    <meta property="og:url" content="https://watermark.wasmer.app/" />
+    <meta property="og:site_name" content="watermark.js" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      property="og:image"
+      content="https://watermark.wasmer.app/watermark.png"
+    />
+    <meta property="og:image:alt" content="watermark.js overlay demo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="watermark.js – JavaScript Watermark Overlay"
+    />
+    <meta
+      name="twitter:description"
+      content="Drop-in script that watermarks any webpage and updates instantly through URL parameters."
+    />
+    <meta
+      name="twitter:image"
+      content="https://watermark.wasmer.app/watermark.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "watermark.js",
+        "applicationCategory": "BrowserApplication",
+        "operatingSystem": "Any",
+        "description": "watermark.js is a lightweight script for overlaying custom image watermarks on any webpage using URL parameters.",
+        "image": "https://watermark.wasmer.app/watermark.png",
+        "downloadUrl": "https://watermark.wasmer.app/watermark.js",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
     <style>
       :root {
         color-scheme: light dark;
@@ -41,6 +99,26 @@
         opacity: 0.9;
       }
 
+      header nav {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      header nav a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      header nav a:focus,
+      header nav a:hover {
+        text-decoration: underline;
+      }
+
       main {
         padding: 2rem 1.5rem 3rem;
         max-width: 72rem;
@@ -49,6 +127,15 @@
 
       section + section {
         margin-top: 3rem;
+      }
+
+      .feature-list {
+        margin: 1rem 0 0;
+        padding-left: 1.1rem;
+      }
+
+      .feature-list li {
+        margin-bottom: 0.5rem;
       }
 
       h2 {
@@ -296,14 +383,37 @@
   </head>
   <body>
     <header>
-      <h1>watermark.js</h1>
+      <h1>watermark.js – JavaScript Watermark Overlay Script</h1>
       <p>
-        Drop-in script that overlays an image watermark anywhere on the page via
-        query-string parameters.
+        Drop-in JavaScript that anchors branded image watermarks anywhere on a
+        webpage using fast, URL-based configuration.
       </p>
+      <nav aria-label="Page sections">
+        <a href="#features">Key features</a>
+        <a href="#quick-start">Quick start</a>
+        <a href="#parameters">Parameters</a>
+        <a href="#live-examples">Live examples</a>
+      </nav>
     </header>
     <main>
-      <section>
+      <section id="features">
+        <h2>Why teams reach for watermark.js</h2>
+        <p>
+          The script ships without dependencies, making it easy to bolt a
+          consistent watermark onto docs, dashboards, or staging previews.
+        </p>
+        <ul class="feature-list">
+          <li>Lightweight vanilla JavaScript (under 5 KB uncompressed).</li>
+          <li>URL parameters control placement, margins, width, and height.</li>
+          <li>
+            Live configurator updates the code snippet and demos instantly.
+          </li>
+          <li>
+            Watermarks ignore pointer events so user interactions stay intact.
+          </li>
+        </ul>
+      </section>
+      <section id="quick-start">
         <h2>Quick Start</h2>
         <p>
           Place a single <code>&lt;script&gt;</code> tag and configure the
@@ -401,7 +511,7 @@
         </p>
       </section>
 
-      <section>
+      <section id="parameters">
         <h2>Parameters</h2>
         <table>
           <thead>
@@ -469,7 +579,7 @@
         </table>
       </section>
 
-      <section>
+      <section id="live-examples">
         <h2>Live Examples</h2>
         <p>
           Each frame below loads the same <code>watermark.js</code> file with
@@ -719,7 +829,14 @@
             values.url,
             buildQuickStartEntries(values),
           );
-          latestSnippet = `<script src="https://watermark.wasmer.app/${scriptSrc}">${closingScript}`;
+          let url = window.location.hostname;
+          if (url === "localhost") {
+            // Keep it relative on selfhost
+            url = "";
+          } else {
+            url = `https://${url}`;
+          }
+          latestSnippet = `<script src="${url}/${scriptSrc}">${closingScript}`;
           snippetEl.textContent = latestSnippet;
           if (copyTimer) {
             window.clearTimeout(copyTimer);
