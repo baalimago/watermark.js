@@ -145,6 +145,96 @@
         background: #f8fafc;
       }
 
+      .quick-start-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: 0.75rem 1rem;
+        align-items: end;
+        margin: 1.5rem 0 1rem;
+      }
+
+      .quick-start-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .quick-start-field.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .quick-start-form label {
+        font-weight: 600;
+        color: #1f2540;
+      }
+
+      .quick-start-form input,
+      .quick-start-form select {
+        padding: 0.6rem 0.75rem;
+        border-radius: 0.55rem;
+        border: 1px solid rgba(30, 41, 59, 0.2);
+        font-size: 1rem;
+        background: #ffffff;
+        color: inherit;
+      }
+
+      .quick-start-form select {
+        min-height: 2.7rem;
+      }
+
+      .quick-start-submit {
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin-top: 0.35rem;
+      }
+
+      .quick-start-snippet {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .quick-start-snippet pre {
+        flex: 1 1 100%;
+        margin: 0;
+      }
+
+      .copy-feedback {
+        font-size: 0.9rem;
+        color: #1f7a3d;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .copy-feedback.is-visible {
+        opacity: 1;
+      }
+
+      .quick-start-form button,
+      .copy-button {
+        background: #273c75;
+        color: #ffffff;
+        border: none;
+        padding: 0.6rem 1.1rem;
+        border-radius: 0.55rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .quick-start-form button:hover,
+      .copy-button:hover {
+        background: #1e2f5a;
+        transform: translateY(-1px);
+      }
+
+      .quick-start-form button:active,
+      .copy-button:active {
+        transform: translateY(0);
+      }
+
       footer {
         margin-top: 3rem;
         padding: 1.5rem;
@@ -178,6 +268,27 @@
         .demo-frame {
           background: #1f2937;
         }
+
+        .quick-start-form input,
+        .quick-start-form select {
+          background: #1f2937;
+          border-color: rgba(148, 163, 184, 0.4);
+          color: #e2e8f0;
+        }
+
+        .quick-start-form button,
+        .copy-button {
+          background: #3b82f6;
+        }
+
+        .quick-start-form button:hover,
+        .copy-button:hover {
+          background: #2563eb;
+        }
+
+        .copy-feedback {
+          color: #4ade80;
+        }
       }
     </style>
   </head>
@@ -193,13 +304,84 @@
       <section>
         <h2>Quick Start</h2>
         <p>
-          Place a single <code>&lt;script&gt;</code> tag and configure the
-          overlay directly in its URL:
+          Place a single <code>&lt;script&gt;</code> tag and configure the overlay directly in its URL. Paste your image below, tweak any of the fields, and click <em>Update examples</em> to refresh the demo and snippet.
         </p>
-        <pre><code>&lt;script src="https://watermark.wasmer.app/watermark.js?url=watermark.png&amp;position=SE&amp;margin=24&amp;max-width=220"&gt;&lt;/script&gt;</code></pre>
+        <form id="watermark-form" class="quick-start-form">
+          <div class="quick-start-field full-width">
+            <label for="watermark-url">Watermark image URL</label>
+            <input
+              id="watermark-url"
+              name="watermark-url"
+              type="text"
+              placeholder="https://example.com/watermark.png"
+              value="watermark.png"
+              spellcheck="false"
+              autocomplete="off"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-position">Position</label>
+            <select id="watermark-position" name="watermark-position">
+              <option value="SE" selected>SE – South East</option>
+              <option value="NE">NE – North East</option>
+              <option value="E">E – East</option>
+              <option value="S">S – South</option>
+              <option value="SW">SW – South West</option>
+              <option value="NW">NW – North West</option>
+              <option value="N">N – North</option>
+              <option value="W">W – West</option>
+              <option value="CENTER">CENTER – Center</option>
+            </select>
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-margin">Margin</label>
+            <input
+              id="watermark-margin"
+              name="watermark-margin"
+              type="text"
+              placeholder="24"
+              value="24"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-max-width">Max width</label>
+            <input
+              id="watermark-max-width"
+              name="watermark-max-width"
+              type="text"
+              placeholder="220"
+              value="220"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-max-height">Max height</label>
+            <input
+              id="watermark-max-height"
+              name="watermark-max-height"
+              type="text"
+              placeholder="240"
+              value="240"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-id">Element id</label>
+            <input
+              id="watermark-id"
+              name="watermark-id"
+              type="text"
+              placeholder="page-demo"
+              value="page-demo"
+            />
+          </div>
+          <button type="submit" class="quick-start-submit">Update examples</button>
+        </form>
+        <div class="quick-start-snippet">
+          <pre><code id="script-snippet"></code></pre>
+          <button type="button" class="copy-button" id="copy-script">Copy script tag</button>
+          <span class="copy-feedback" id="copy-feedback" role="status" aria-live="polite">Copied!</span>
+        </div>
         <p>
-          The script finds the parameters on its own, downloads the image, and
-          anchors it to the chosen corner.
+          The script finds the parameters on its own, downloads the image, and anchors it to the chosen corner.
         </p>
       </section>
 
@@ -278,8 +460,7 @@
           different parameters.
         </p>
         <p>
-          All of them reuse the local <code>watermark.png</code> asset so you
-          can preview things offline.
+          They default to the local <code>watermark.png</code> asset but will update whenever you change the URL above, so you can preview your own artwork offline.
         </p>
         <div class="demo-grid">
           <article class="demo-card">
@@ -288,6 +469,12 @@
             <iframe
               title="SE watermark"
               class="demo-frame"
+              data-watermark-demo="true"
+              data-id="demo-se"
+              data-position="SE"
+              data-margin="12"
+              data-max-width="160"
+              data-description="margin=12, max-width=160"
               srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SE</h4><p>margin=12, max-width=160</p></main><script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=12&amp;max-width=160&amp;id=demo-se"></script></body></html>'
             ></iframe>
           </article>
@@ -297,6 +484,12 @@
             <iframe
               title="Center watermark"
               class="demo-frame"
+              data-watermark-demo="true"
+              data-id="demo-center"
+              data-position="CENTER"
+              data-max-width="200"
+              data-max-height="200"
+              data-description="margin ignored, max-width=200, max-height=200"
               srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;text-align:center;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=CENTER</h4><p>margin ignored, max-width=200, max-height=200</p></main><script src="watermark.js?url=watermark.png&amp;position=CENTER&amp;max-width=200&amp;max-height=200&amp;id=demo-center"></script></body></html>'
             ></iframe>
           </article>
@@ -306,6 +499,12 @@
             <iframe
               title="NW watermark"
               class="demo-frame"
+              data-watermark-demo="true"
+              data-id="demo-nw"
+              data-position="NW"
+              data-margin="32px"
+              data-max-height="120"
+              data-description="margin=32px, max-height=120"
               srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;id=demo-nw"></script></body></html>'
             ></iframe>
           </article>
@@ -318,6 +517,321 @@
       is ready.
     </footer>
 
-    <script src="watermark.js?url=watermark.png&amp;position=NE&amp;margin=24&amp;max-width=220&amp;id=page-demo"></script>
+    <script>
+      (function () {
+        const defaultUrl = 'watermark.png';
+        const defaults = {
+          url: defaultUrl,
+          position: 'SE',
+          margin: '24',
+          maxWidth: '220',
+          maxHeight: '240',
+          id: 'page-demo',
+        };
+        const allowedPositions = new Set(['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'CENTER', 'C']);
+
+        const form = document.getElementById('watermark-form');
+        const urlInput = document.getElementById('watermark-url');
+        const positionInput = document.getElementById('watermark-position');
+        const marginInput = document.getElementById('watermark-margin');
+        const maxWidthInput = document.getElementById('watermark-max-width');
+        const maxHeightInput = document.getElementById('watermark-max-height');
+        const idInput = document.getElementById('watermark-id');
+        const snippetEl = document.getElementById('script-snippet');
+        const copyButton = document.getElementById('copy-script');
+        const copyFeedback = document.getElementById('copy-feedback');
+        const demoFrames = Array.from(document.querySelectorAll('[data-watermark-demo]'));
+
+        if (
+          !form ||
+          !urlInput ||
+          !positionInput ||
+          !marginInput ||
+          !maxWidthInput ||
+          !maxHeightInput ||
+          !idInput ||
+          !snippetEl ||
+          !copyButton ||
+          !copyFeedback
+        ) {
+          return;
+        }
+
+        let latestSnippet = '';
+        let copyTimer = null;
+        let pageScript = null;
+        let currentOverlayId = defaults.id;
+        const closingScript = '</scr' + 'ipt>';
+
+        function sanitizeUrl(value) {
+          const trimmed = String(value || '').trim();
+          return trimmed || defaultUrl;
+        }
+
+        function sanitizePosition(value) {
+          const trimmed = String(value || '').trim().toUpperCase();
+          if (!trimmed) return defaults.position;
+          if (trimmed === 'C') return 'CENTER';
+          if (allowedPositions.has(trimmed)) {
+            return trimmed === 'CENTER' ? 'CENTER' : trimmed;
+          }
+          return defaults.position;
+        }
+
+        function sanitizeLength(value, fallback, allowEmpty) {
+          const trimmed = String(value || '').trim();
+          if (!trimmed) {
+            return allowEmpty ? '' : fallback;
+          }
+          return trimmed;
+        }
+
+        function sanitizeId(value, fallback) {
+          const trimmed = String(value || '').trim();
+          return trimmed || fallback;
+        }
+
+        function getFormValues() {
+          return {
+            url: sanitizeUrl(urlInput.value),
+            position: sanitizePosition(positionInput.value),
+            margin: sanitizeLength(marginInput.value, defaults.margin, false),
+            maxWidth: sanitizeLength(maxWidthInput.value, defaults.maxWidth, false),
+            maxHeight: sanitizeLength(maxHeightInput.value, defaults.maxHeight, true),
+            id: sanitizeId(idInput.value, defaults.id),
+          };
+        }
+
+        function applyFormValues(values) {
+          urlInput.value = values.url;
+          positionInput.value = values.position;
+          marginInput.value = values.margin;
+          maxWidthInput.value = values.maxWidth;
+          maxHeightInput.value = values.maxHeight || '';
+          idInput.value = values.id;
+        }
+
+        function buildScriptSrc(imageUrl, entries) {
+          const params = new URLSearchParams();
+          entries.forEach(([key, value]) => {
+            if (value !== '' && value != null) {
+              params.set(key, value);
+            }
+          });
+          params.set('url', imageUrl);
+          return `watermark.js?${params.toString()}`;
+        }
+
+        function buildQuickStartEntries(values) {
+          const entries = [];
+          const push = (key, value) => {
+            if (value !== '' && value != null) {
+              entries.push([key, value]);
+            }
+          };
+          push('position', values.position);
+          push('margin', values.margin);
+          push('max-width', values.maxWidth);
+          push('max-height', values.maxHeight);
+          push('id', values.id);
+          return entries;
+        }
+
+        function encodeAttr(value) {
+          const str = String(value);
+          return str.replace(/[&"'<>]/g, (char) => {
+            switch (char) {
+              case '&':
+                return '&amp;';
+              case '"':
+                return '&quot;';
+              case "'":
+                return '&#39;';
+              case '<':
+                return '&lt;';
+              case '>':
+                return '&gt;';
+              default:
+                return char;
+            }
+          });
+        }
+
+        function escapeHtml(value) {
+          const str = String(value);
+          return str.replace(/[&<>]/g, (char) => {
+            switch (char) {
+              case '&':
+                return '&amp;';
+              case '<':
+                return '&lt;';
+              case '>':
+                return '&gt;';
+              default:
+                return char;
+            }
+          });
+        }
+
+        function setSnippet(values) {
+          const scriptSrc = buildScriptSrc(values.url, buildQuickStartEntries(values));
+          latestSnippet = `<script src="${scriptSrc}">${closingScript}`;
+          snippetEl.textContent = latestSnippet;
+          if (copyTimer) {
+            window.clearTimeout(copyTimer);
+            copyTimer = null;
+          }
+          copyFeedback.classList.remove('is-visible');
+        }
+
+        function buildFrameDoc(headline, detailText, scriptSrc) {
+          const safeSrc = encodeAttr(scriptSrc);
+          const safeHeadline = escapeHtml(headline);
+          const safeDetail = escapeHtml(detailText);
+
+          return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}h4{margin:0;color:#1f2937;font-family:sans-serif;}p{margin-top:0.5rem;color:#475569;font-family:sans-serif;}</style></head><body><main><h4>${safeHeadline}</h4><p>${safeDetail}</p></main><script src="${safeSrc}">${closingScript}</body></html>`;
+        }
+
+        function updateFrames(values) {
+          demoFrames.forEach((frame) => {
+            const { id, position, margin, maxWidth, maxHeight, description } = frame.dataset;
+            const resolvedPosition = position || values.position;
+            const resolvedMargin = margin || values.margin;
+            const resolvedMaxWidth = maxWidth || values.maxWidth;
+            const resolvedMaxHeight = maxHeight || values.maxHeight;
+            const frameId = id || values.id || `demo-${Math.random().toString(36).slice(2, 8)}`;
+            const params = [];
+
+            if (resolvedPosition) params.push(['position', resolvedPosition]);
+            if (resolvedMargin) params.push(['margin', resolvedMargin]);
+            if (resolvedMaxWidth) params.push(['max-width', resolvedMaxWidth]);
+            if (resolvedMaxHeight) params.push(['max-height', resolvedMaxHeight]);
+            params.push(['id', frameId]);
+
+            const scriptSrc = buildScriptSrc(values.url, params);
+            const detailText = description || 'default settings';
+            const headline = resolvedPosition ? `position=${resolvedPosition}` : 'watermark demo';
+
+            frame.srcdoc = buildFrameDoc(headline, detailText, scriptSrc);
+          });
+        }
+
+        function mountPageWatermark(values) {
+          const overlayId = values.id || defaults.id;
+          const entries = [];
+          entries.push(['position', values.position]);
+          entries.push(['margin', values.margin]);
+          if (values.maxWidth) entries.push(['max-width', values.maxWidth]);
+          if (values.maxHeight) entries.push(['max-height', values.maxHeight]);
+          entries.push(['id', overlayId]);
+
+          const scriptSrc = buildScriptSrc(values.url, entries);
+
+          if (pageScript) {
+            pageScript.remove();
+            pageScript = null;
+          }
+
+          if (currentOverlayId && currentOverlayId !== overlayId) {
+            const stale = document.getElementById(currentOverlayId);
+            if (stale && stale.parentNode) {
+              stale.parentNode.removeChild(stale);
+            }
+          }
+
+          const existing = document.getElementById(overlayId);
+          if (existing && existing.parentNode) {
+            existing.parentNode.removeChild(existing);
+          }
+
+          const script = document.createElement('script');
+          script.src = scriptSrc;
+          script.dataset.pageDemo = 'true';
+          document.body.appendChild(script);
+          pageScript = script;
+          currentOverlayId = overlayId;
+        }
+
+        function updateAll(formValues) {
+          const values = formValues || getFormValues();
+          setSnippet(values);
+          updateFrames(values);
+          mountPageWatermark(values);
+          return values;
+        }
+
+        function handleSubmit(event) {
+          event.preventDefault();
+          const values = updateAll();
+          applyFormValues(values);
+        }
+
+        function showCopyFeedback() {
+          copyFeedback.classList.add('is-visible');
+          if (copyTimer) window.clearTimeout(copyTimer);
+          copyTimer = window.setTimeout(() => {
+            copyFeedback.classList.remove('is-visible');
+          }, 2000);
+        }
+
+        function clearCopyFeedback() {
+          if (copyTimer) {
+            window.clearTimeout(copyTimer);
+            copyTimer = null;
+          }
+          copyFeedback.classList.remove('is-visible');
+        }
+
+        function fallbackCopy() {
+          const selection = window.getSelection();
+          if (!selection) return;
+          const range = document.createRange();
+          range.selectNodeContents(snippetEl);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          try {
+            document.execCommand('copy');
+          } catch (err) {
+            console.warn('[watermark] Unable to copy snippet automatically.', err);
+          }
+          selection.removeAllRanges();
+          showCopyFeedback();
+        }
+
+        function handleCopy() {
+          if (!latestSnippet) return;
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+              .writeText(latestSnippet)
+              .then(showCopyFeedback)
+              .catch(() => {
+                fallbackCopy();
+              });
+          } else {
+            fallbackCopy();
+          }
+        }
+
+        const formControls = [
+          urlInput,
+          positionInput,
+          marginInput,
+          maxWidthInput,
+          maxHeightInput,
+          idInput,
+        ];
+
+        form.addEventListener('submit', handleSubmit);
+        formControls.forEach((control) => {
+          control.addEventListener('input', clearCopyFeedback);
+          control.addEventListener('change', clearCopyFeedback);
+        });
+        copyButton.addEventListener('click', handleCopy);
+
+        const initialValues = updateAll();
+        applyFormValues(initialValues);
+      }());
+    </script>
   </body>
 </html>
