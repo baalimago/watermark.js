@@ -1,278 +1,323 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>watermark.js – Demo & Guide</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>watermark.js – Demo & Guide</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.55;
+      }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background: #f6f6f9;
-      color: #1f1f28;
-    }
-
-    header {
-      padding: 2.5rem 1.5rem 1rem;
-      background: linear-gradient(135deg, #4b6cb7, #182848);
-      color: #ffffff;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3rem);
-    }
-
-    header p {
-      margin: 0.5rem auto 0;
-      max-width: 48rem;
-      opacity: 0.9;
-    }
-
-    main {
-      padding: 2rem 1.5rem 3rem;
-      max-width: 72rem;
-      margin: 0 auto;
-    }
-
-    section + section {
-      margin-top: 3rem;
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 1.7rem;
-      color: #202547;
-    }
-
-    code {
-      padding: 0.15rem 0.35rem;
-      border-radius: 0.35rem;
-      background: rgba(27, 31, 35, 0.08);
-      font-size: 0.95rem;
-    }
-
-    pre {
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 1rem 1.25rem;
-      border-radius: 0.75rem;
-      overflow-x: auto;
-    }
-
-    pre code {
-      background: transparent;
-      padding: 0;
-      font-size: 0.95rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      background: #ffffff;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: 0 6px 28px rgba(15, 23, 42, 0.08);
-    }
-
-    table th,
-    table td {
-      text-align: left;
-      padding: 0.9rem 1rem;
-      vertical-align: top;
-    }
-
-    table thead {
-      background: #e5e7ff;
-      color: #111827;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-    }
-
-    table tbody tr:nth-child(even) {
-      background: rgba(229, 231, 255, 0.25);
-    }
-
-    .demo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .demo-card {
-      background: #ffffff;
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 32px rgba(15, 23, 42, 0.1);
-      padding: 1.25rem;
-    }
-
-    .demo-card h3 {
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      color: #273c75;
-      font-size: 1.2rem;
-    }
-
-    .demo-card p {
-      margin-top: 0;
-      font-size: 0.95rem;
-      color: #404968;
-    }
-
-    .demo-frame {
-      width: 100%;
-      height: 260px;
-      border: 0;
-      border-radius: 0.75rem;
-      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.1);
-      margin-top: 1rem;
-      background: #f8fafc;
-    }
-
-    footer {
-      margin-top: 3rem;
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 0.85rem;
-      color: #475569;
-    }
-
-    @media (prefers-color-scheme: dark) {
       body {
-        background: #0f172a;
-        color: #e2e8f0;
+        margin: 0;
+        padding: 0;
+        background: #f6f6f9;
+        color: #1f1f28;
       }
 
       header {
-        background: linear-gradient(135deg, #0f172a, #1e293b);
+        padding: 2.5rem 1.5rem 1rem;
+        background: linear-gradient(135deg, #4b6cb7, #182848);
+        color: #ffffff;
+        text-align: center;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3rem);
+      }
+
+      header p {
+        margin: 0.5rem auto 0;
+        max-width: 48rem;
+        opacity: 0.9;
+      }
+
+      main {
+        padding: 2rem 1.5rem 3rem;
+        max-width: 72rem;
+        margin: 0 auto;
+      }
+
+      section + section {
+        margin-top: 3rem;
+      }
+
+      h2 {
+        margin-top: 0;
+        font-size: 1.7rem;
+        color: #202547;
+      }
+
+      code {
+        padding: 0.15rem 0.35rem;
+        border-radius: 0.35rem;
+        background: rgba(27, 31, 35, 0.08);
+        font-size: 0.95rem;
+      }
+
+      pre {
+        background: #0f172a;
+        color: #f8fafc;
+        padding: 1rem 1.25rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+      }
+
+      pre code {
+        background: transparent;
+        padding: 0;
+        font-size: 0.95rem;
       }
 
       table {
-        background: #111827;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        background: #ffffff;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 6px 28px rgba(15, 23, 42, 0.08);
+      }
+
+      table th,
+      table td {
+        text-align: left;
+        padding: 0.9rem 1rem;
+        vertical-align: top;
+      }
+
+      table thead {
+        background: #e5e7ff;
+        color: #111827;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
       }
 
       table tbody tr:nth-child(even) {
-        background: rgba(59, 130, 246, 0.08);
+        background: rgba(229, 231, 255, 0.25);
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
       }
 
       .demo-card {
-        background: #111827;
+        background: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 32px rgba(15, 23, 42, 0.1);
+        padding: 1.25rem;
+      }
+
+      .demo-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #273c75;
+        font-size: 1.2rem;
+      }
+
+      .demo-card p {
+        margin-top: 0;
+        font-size: 0.95rem;
+        color: #404968;
       }
 
       .demo-frame {
-        background: #1f2937;
+        width: 100%;
+        height: 260px;
+        border: 0;
+        border-radius: 0.75rem;
+        box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.1);
+        margin-top: 1rem;
+        background: #f8fafc;
       }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>watermark.js</h1>
-    <p>Drop-in script that overlays an image watermark anywhere on the page via query-string parameters.</p>
-  </header>
-  <main>
-    <section>
-      <h2>Quick Start</h2>
-      <p>Place a single <code>&lt;script&gt;</code> tag and configure the overlay directly in its URL:</p>
-      <pre><code>&lt;script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=24&amp;max-width=220"&gt;&lt;/script&gt;</code></pre>
-      <p>The script finds the parameters on its own, downloads the image, and anchors it to the chosen corner.</p>
-    </section>
 
-    <section>
-      <h2>Parameters</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>url</code> (required)</td>
-            <td>URL</td>
-            <td>Relative or absolute URL to the watermark image (for example <code>watermark.png</code>). Encode absolute URLs with <code>encodeURIComponent</code> when embedding in the query string.</td>
-          </tr>
-          <tr>
-            <td><code>position</code></td>
-            <td>Compass code</td>
-            <td>Where to pin the watermark. Accepts <code>N</code>, <code>NE</code>, <code>E</code>, <code>SE</code>, <code>S</code>, <code>SW</code>, <code>W</code>, <code>NW</code>, or <code>C</code>/<code>CENTER</code>. Defaults to <code>SE</code>.</td>
-          </tr>
-          <tr>
-            <td><code>max-width</code></td>
-            <td>CSS size</td>
-            <td>Maximum width of the watermark image. Plain numbers are treated as pixels. Defaults to <code>240px</code>.</td>
-          </tr>
-          <tr>
-            <td><code>max-height</code></td>
-            <td>CSS size</td>
-            <td>Maximum height of the watermark image. Plain numbers are treated as pixels. Defaults to <code>240px</code>.</td>
-          </tr>
-          <tr>
-            <td><code>margin</code></td>
-            <td>CSS size</td>
-            <td>Offset from the edges used for the chosen position. Accepts any valid CSS length. Defaults to <code>16px</code>.</td>
-          </tr>
-          <tr>
-            <td><code>id</code></td>
-            <td>string</td>
-            <td>Optional custom element id. Useful when you want to render multiple watermarks on the same page.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+      footer {
+        margin-top: 3rem;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #475569;
+      }
 
-    <section>
-      <h2>Live Examples</h2>
-      <p>Each frame below loads the same <code>watermark.js</code> file with different parameters.</p>
-      <p>All of them reuse the local <code>watermark.png</code> asset so you can preview things offline.</p>
-      <div class="demo-grid">
-        <article class="demo-card">
-          <h3>Compass South-East</h3>
-          <p>Bottom-right corner, tighter margin, constrained width.</p>
-          <iframe
-            title="SE watermark"
-            class="demo-frame"
-            srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SE</h4><p>margin=12, max-width=160</p></main><script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=12&amp;max-width=160&amp;id=demo-se"></script></body></html>'
-          ></iframe>
-        </article>
-        <article class="demo-card">
-          <h3>Centered Overlay</h3>
-          <p>Places the watermark in the middle of the viewport.</p>
-          <iframe
-            title="Center watermark"
-            class="demo-frame"
-            srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;text-align:center;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=CENTER</h4><p>margin ignored, max-width=200, max-height=200</p></main><script src="watermark.js?url=watermark.png&amp;position=CENTER&amp;max-width=200&amp;max-height=200&amp;id=demo-center"></script></body></html>'
-          ></iframe>
-        </article>
-        <article class="demo-card">
-          <h3>North-West Placement</h3>
-          <p>Top-left corner with larger padding and height limit.</p>
-          <iframe
-            title="NW watermark"
-            class="demo-frame"
-            srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;id=demo-nw"></script></body></html>'
-          ></iframe>
-        </article>
-      </div>
-    </section>
-  </main>
-  <footer>
-    Include <code>watermark.js</code> at the very end of your document (or with <code>defer</code>) so the watermark can attach itself once the DOM is ready.
-  </footer>
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #0f172a;
+          color: #e2e8f0;
+        }
 
-  <script src="watermark.js?url=watermark.png&amp;position=NE&amp;margin=24&amp;max-width=220&amp;id=page-demo"></script>
-</body>
+        header {
+          background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+
+        table {
+          background: #111827;
+        }
+
+        table tbody tr:nth-child(even) {
+          background: rgba(59, 130, 246, 0.08);
+        }
+
+        .demo-card {
+          background: #111827;
+        }
+
+        .demo-frame {
+          background: #1f2937;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>watermark.js</h1>
+      <p>
+        Drop-in script that overlays an image watermark anywhere on the page via
+        query-string parameters.
+      </p>
+    </header>
+    <main>
+      <section>
+        <h2>Quick Start</h2>
+        <p>
+          Place a single <code>&lt;script&gt;</code> tag and configure the
+          overlay directly in its URL:
+        </p>
+        <pre><code>&lt;script src="https://watermark.wasmer.app/watermark.js?url=watermark.png&amp;position=SE&amp;margin=24&amp;max-width=220"&gt;&lt;/script&gt;</code></pre>
+        <p>
+          The script finds the parameters on its own, downloads the image, and
+          anchors it to the chosen corner.
+        </p>
+      </section>
+
+      <section>
+        <h2>Parameters</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>url</code> (required)</td>
+              <td>URL</td>
+              <td>
+                Relative or absolute URL to the watermark image (for example
+                <code>watermark.png</code>). Encode absolute URLs with
+                <code>encodeURIComponent</code> when embedding in the query
+                string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>position</code></td>
+              <td>Compass code</td>
+              <td>
+                Where to pin the watermark. Accepts <code>N</code>,
+                <code>NE</code>, <code>E</code>, <code>SE</code>,
+                <code>S</code>, <code>SW</code>, <code>W</code>,
+                <code>NW</code>, or <code>C</code>/<code>CENTER</code>. Defaults
+                to <code>SE</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>max-width</code></td>
+              <td>CSS size</td>
+              <td>
+                Maximum width of the watermark image. Plain numbers are treated
+                as pixels. Defaults to <code>240px</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>max-height</code></td>
+              <td>CSS size</td>
+              <td>
+                Maximum height of the watermark image. Plain numbers are treated
+                as pixels. Defaults to <code>240px</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>margin</code></td>
+              <td>CSS size</td>
+              <td>
+                Offset from the edges used for the chosen position. Accepts any
+                valid CSS length. Defaults to <code>16px</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>id</code></td>
+              <td>string</td>
+              <td>
+                Optional custom element id. Useful when you want to render
+                multiple watermarks on the same page.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Live Examples</h2>
+        <p>
+          Each frame below loads the same <code>watermark.js</code> file with
+          different parameters.
+        </p>
+        <p>
+          All of them reuse the local <code>watermark.png</code> asset so you
+          can preview things offline.
+        </p>
+        <div class="demo-grid">
+          <article class="demo-card">
+            <h3>Compass South-East</h3>
+            <p>Bottom-right corner, tighter margin, constrained width.</p>
+            <iframe
+              title="SE watermark"
+              class="demo-frame"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SE</h4><p>margin=12, max-width=160</p></main><script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=12&amp;max-width=160&amp;id=demo-se"></script></body></html>'
+            ></iframe>
+          </article>
+          <article class="demo-card">
+            <h3>Centered Overlay</h3>
+            <p>Places the watermark in the middle of the viewport.</p>
+            <iframe
+              title="Center watermark"
+              class="demo-frame"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;text-align:center;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=CENTER</h4><p>margin ignored, max-width=200, max-height=200</p></main><script src="watermark.js?url=watermark.png&amp;position=CENTER&amp;max-width=200&amp;max-height=200&amp;id=demo-center"></script></body></html>'
+            ></iframe>
+          </article>
+          <article class="demo-card">
+            <h3>North-West Placement</h3>
+            <p>Top-left corner with larger padding and height limit.</p>
+            <iframe
+              title="NW watermark"
+              class="demo-frame"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;id=demo-nw"></script></body></html>'
+            ></iframe>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Include <code>watermark.js</code> at the very end of your document (or
+      with <code>defer</code>) so the watermark can attach itself once the DOM
+      is ready.
+    </footer>
+
+    <script src="watermark.js?url=watermark.png&amp;position=NE&amp;margin=24&amp;max-width=220&amp;id=page-demo"></script>
+  </body>
 </html>
