@@ -1,5 +1,3 @@
-# watermark.js
-
 <p align="center">
   <img src="watermark.png" height="300px" />
 </p>
