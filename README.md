@@ -1,5 +1,9 @@
 # watermark.js
 
+<p align="center">
+  <img src="watermark.png" height="300px" />
+</p>
+
 Drop-in browser script that overlays an image watermark on any web page using query-string parameters for configuration.
 
 ## Files
@@ -19,14 +23,14 @@ Drop-in browser script that overlays an image watermark on any web page using qu
 
 ### Parameters
 
-| Name        | Required | Description                                                                                                      |
-| ----------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `url`       | Yes      | Relative or absolute path to the watermark image (for example `watermark.png`).                                  |
-| `position`  | No       | Compass location (`N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW`, `C`, `CENTER`). Defaults to `SE`.                  |
-| `max-width` | No       | Maximum width for the image. Plain numbers are treated as pixels. Defaults to `240px`.                           |
-| `max-height`| No       | Maximum height for the image. Plain numbers are treated as pixels. Defaults to `240px`.                          |
-| `margin`    | No       | CSS distance from the chosen edges. Accepts any CSS length. Defaults to `16px`.                                  |
-| `id`        | No       | Optional element id if you need multiple independent watermarks on the same page.                               |
+| Name         | Required | Description                                                                                     |
+| ------------ | -------- | ----------------------------------------------------------------------------------------------- |
+| `url`        | Yes      | Relative or absolute path to the watermark image (for example `watermark.png`).                 |
+| `position`   | No       | Compass location (`N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW`, `C`, `CENTER`). Defaults to `SE`. |
+| `max-width`  | No       | Maximum width for the image. Plain numbers are treated as pixels. Defaults to `240px`.          |
+| `max-height` | No       | Maximum height for the image. Plain numbers are treated as pixels. Defaults to `240px`.         |
+| `margin`     | No       | CSS distance from the chosen edges. Accepts any CSS length. Defaults to `16px`.                 |
+| `id`         | No       | Optional element id if you need multiple independent watermarks on the same page.               |
 
 ## Demo
 
