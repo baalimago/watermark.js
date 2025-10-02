@@ -106,6 +106,7 @@
     const positionStyles = buildPositionStyles(params.position, margin);
     const maxWidth = parseSize(params['max-width'] || params.maxWidth, '240px');
     const maxHeight = parseSize(params['max-height'] || params.maxHeight, '240px');
+    const background = (params.background || params['background-color'] || '').trim() || 'transparent';
 
     const container = document.createElement('div');
     container.id = containerId;
@@ -114,6 +115,7 @@
     container.style.pointerEvents = 'none';
     container.style.boxSizing = 'border-box';
     container.style.display = 'inline-block';
+    container.style.backgroundColor = background;
 
     applyPositionStyles(container, positionStyles);
 

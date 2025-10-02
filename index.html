@@ -411,6 +411,9 @@
           <li>
             Watermarks ignore pointer events so user interactions stay intact.
           </li>
+          <li>
+            Optional background tint boosts readability on complex layouts.
+          </li>
         </ul>
       </section>
       <section id="quick-start">
@@ -456,6 +459,29 @@
               type="text"
               placeholder="24"
               value="24"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-background-color">Background color</label>
+            <input
+              id="watermark-background-color"
+              name="watermark-background-color"
+              type="color"
+              value="#12243c"
+            />
+          </div>
+          <div class="quick-start-field">
+            <label for="watermark-background-opacity"
+              >Background opacity (%)</label
+            >
+            <input
+              id="watermark-background-opacity"
+              name="watermark-background-opacity"
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              value="0"
             />
           </div>
           <div class="quick-start-field">
@@ -568,6 +594,15 @@
               </td>
             </tr>
             <tr>
+              <td><code>background</code></td>
+              <td>CSS color</td>
+              <td>
+                Optional background fill behind the watermark image. Set to any
+                CSS color (hex, rgb, hsl) to boost contrast. Defaults to
+                <code>transparent</code>.
+              </td>
+            </tr>
+            <tr>
               <td><code>id</code></td>
               <td>string</td>
               <td>
@@ -602,8 +637,9 @@
               data-position="SE"
               data-margin="12"
               data-max-width="160"
-              data-description="margin=12, max-width=160"
-              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SE</h4><p>margin=12, max-width=160</p></main><script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=12&amp;max-width=160&amp;id=demo-se"></script></body></html>'
+              data-background="rgba(18,24,60,0.6)"
+              data-description="margin=12, max-width=160, background=rgba(18,24,60,0.6)"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SE</h4><p>margin=12, max-width=160, background=rgba(18,24,60,0.6)</p></main><script src="watermark.js?url=watermark.png&amp;position=SE&amp;margin=12&amp;max-width=160&amp;background=rgba(18%2C24%2C60%2C0.6)&amp;id=demo-se"></script></body></html>'
             ></iframe>
           </article>
           <article class="demo-card">
@@ -632,8 +668,9 @@
               data-position="NW"
               data-margin="32px"
               data-max-height="120"
-              data-description="margin=32px, max-height=120"
-              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;id=demo-nw"></script></body></html>'
+              data-background="rgba(255,255,255,0.7)"
+              data-description="margin=32px, max-height=120, background=rgba(255,255,255,0.7)"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120, background=rgba(255,255,255,0.7)</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;background=rgba(255%2C255%2C255%2C0.7)&amp;id=demo-nw"></script></body></html>'
             ></iframe>
           </article>
         </div>
@@ -652,6 +689,9 @@
           url: defaultUrl,
           position: "SE",
           margin: "24",
+          background: "transparent",
+          backgroundColor: "#12243c",
+          backgroundOpacity: 0,
           maxWidth: "220",
           maxHeight: "240",
           id: "page-demo",
@@ -673,6 +713,12 @@
         const urlInput = document.getElementById("watermark-url");
         const positionInput = document.getElementById("watermark-position");
         const marginInput = document.getElementById("watermark-margin");
+        const backgroundColorInput = document.getElementById(
+          "watermark-background-color",
+        );
+        const backgroundOpacityInput = document.getElementById(
+          "watermark-background-opacity",
+        );
         const maxWidthInput = document.getElementById("watermark-max-width");
         const maxHeightInput = document.getElementById("watermark-max-height");
         const idInput = document.getElementById("watermark-id");
@@ -688,6 +734,8 @@
           !urlInput ||
           !positionInput ||
           !marginInput ||
+          !backgroundColorInput ||
+          !backgroundOpacityInput ||
           !maxWidthInput ||
           !maxHeightInput ||
           !idInput ||
@@ -702,6 +750,7 @@
         let copyTimer = null;
         let pageScript = null;
         let currentOverlayId = defaults.id;
+        let backgroundDirty = false;
         const closingScript = "</scr" + "ipt>";
 
         function sanitizeUrl(value) {
@@ -734,11 +783,89 @@
           return trimmed || fallback;
         }
 
+        function sanitizeHexColor(value, fallback) {
+          const trimmed = String(value || "").trim();
+          if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(trimmed)) {
+            if (trimmed.length === 4) {
+              return `#${trimmed[1]}${trimmed[1]}${trimmed[2]}${trimmed[2]}${trimmed[3]}${trimmed[3]}`;
+            }
+            return trimmed.toLowerCase();
+          }
+          return fallback;
+        }
+
+        function sanitizeOpacity(value, fallback) {
+          const numeric = Number(value);
+          if (Number.isFinite(numeric)) {
+            if (numeric <= 0) return 0;
+            if (numeric >= 100) return 100;
+            return Math.round(numeric);
+          }
+          return fallback;
+        }
+
+        function hexToRgb(hex) {
+          const normalized = hex.replace("#", "");
+          const value =
+            normalized.length === 3
+              ? normalized
+                  .split("")
+                  .map((char) => char + char)
+                  .join("")
+              : normalized;
+          const int = Number.parseInt(value, 16);
+          if (Number.isNaN(int)) {
+            throw new Error("Invalid hex color");
+          }
+          return {
+            r: (int >> 16) & 255,
+            g: (int >> 8) & 255,
+            b: int & 255,
+          };
+        }
+
+        function buildBackgroundValue(color, opacity) {
+          if (opacity <= 0) return "transparent";
+          try {
+            const { r, g, b } = hexToRgb(color);
+            const alphaRaw = Math.min(Math.max(opacity, 0), 100) / 100;
+            const alpha = Math.round(alphaRaw * 100) / 100;
+            return `rgba(${r},${g},${b},${alpha})`;
+          } catch (error) {
+            return "transparent";
+          }
+        }
+
         function getFormValues() {
+          const backgroundColor = sanitizeHexColor(
+            backgroundColorInput.value,
+            defaults.backgroundColor,
+          );
+          const backgroundOpacity = sanitizeOpacity(
+            backgroundOpacityInput.value,
+            defaults.backgroundOpacity,
+          );
+          const matchesDefaults =
+            backgroundColor === defaults.backgroundColor &&
+            backgroundOpacity === defaults.backgroundOpacity;
+
+          if (!matchesDefaults) {
+            backgroundDirty = true;
+          } else if (backgroundDirty) {
+            backgroundDirty = false;
+          }
+
           return {
             url: sanitizeUrl(urlInput.value),
             position: sanitizePosition(positionInput.value),
             margin: sanitizeLength(marginInput.value, defaults.margin, false),
+            backgroundColor,
+            backgroundOpacity,
+            background: buildBackgroundValue(
+              backgroundColor,
+              backgroundOpacity,
+            ),
+            backgroundDirty,
             maxWidth: sanitizeLength(
               maxWidthInput.value,
               defaults.maxWidth,
@@ -757,6 +884,8 @@
           urlInput.value = values.url;
           positionInput.value = values.position;
           marginInput.value = values.margin;
+          backgroundColorInput.value = values.backgroundColor;
+          backgroundOpacityInput.value = values.backgroundOpacity;
           maxWidthInput.value = values.maxWidth;
           maxHeightInput.value = values.maxHeight || "";
           idInput.value = values.id;
@@ -782,6 +911,9 @@
           };
           push("position", values.position);
           push("margin", values.margin);
+          if (values.background && values.background !== "transparent") {
+            push("background", values.background);
+          }
           push("max-width", values.maxWidth);
           push("max-height", values.maxHeight);
           push("id", values.id);
@@ -855,8 +987,15 @@
 
         function updateFrames(values) {
           demoFrames.forEach((frame) => {
-            const { id, position, margin, maxWidth, maxHeight, description } =
-              frame.dataset;
+            const {
+              id,
+              position,
+              margin,
+              maxWidth,
+              maxHeight,
+              background,
+              description,
+            } = frame.dataset;
             const resolvedPosition = position || values.position;
             const resolvedMargin = margin || values.margin;
             const resolvedMaxWidth = maxWidth || values.maxWidth;
@@ -872,6 +1011,13 @@
             if (resolvedMaxWidth) params.push(["max-width", resolvedMaxWidth]);
             if (resolvedMaxHeight)
               params.push(["max-height", resolvedMaxHeight]);
+            const hasCustomBackground =
+              values.backgroundDirty || values.background !== "transparent";
+            const resolvedBackground = hasCustomBackground
+              ? values.background
+              : background || values.background;
+            if (resolvedBackground && resolvedBackground !== "transparent")
+              params.push(["background", resolvedBackground]);
             params.push(["id", frameId]);
 
             const scriptSrc = buildScriptSrc(values.url, params);
@@ -889,6 +1035,9 @@
           const entries = [];
           entries.push(["position", values.position]);
           entries.push(["margin", values.margin]);
+          if (values.background && values.background !== "transparent") {
+            entries.push(["background", values.background]);
+          }
           if (values.maxWidth) entries.push(["max-width", values.maxWidth]);
           if (values.maxHeight) entries.push(["max-height", values.maxHeight]);
           entries.push(["id", overlayId]);
@@ -988,10 +1137,21 @@
           urlInput,
           positionInput,
           marginInput,
+          backgroundColorInput,
+          backgroundOpacityInput,
           maxWidthInput,
           maxHeightInput,
           idInput,
         ];
+
+        const markBackgroundDirty = () => {
+          backgroundDirty = true;
+        };
+
+        backgroundColorInput.addEventListener("input", markBackgroundDirty);
+        backgroundColorInput.addEventListener("change", markBackgroundDirty);
+        backgroundOpacityInput.addEventListener("input", markBackgroundDirty);
+        backgroundOpacityInput.addEventListener("change", markBackgroundDirty);
 
         form.addEventListener("submit", handleSubmit);
         formControls.forEach((control) => {
