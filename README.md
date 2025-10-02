@@ -40,3 +40,7 @@ Open `index.html` in a browser to view a mini guide plus live examples. Each ifr
 - The script waits for `DOMContentLoaded` if necessary, so you can include it anywhere in the page head or body.
 - The watermark uses `pointer-events: none` to avoid intercepting clicks.
 - On image load failure the script logs an error and removes the overlay.
+
+## Development
+
+This app has been entirely vibe-coded. Venture into logic at your own peril.
