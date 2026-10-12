@@ -1,0 +1,15 @@
+kind: wasmer.io/App.v0
+name: watermark
+owner: baalimago
+package: .
+app_id: da_2l9IzteUNaoL
+annotations:
+  anybuild.run/config:
+    commands:
+      build: ''
+      install: ''
+      start: ''
+    name: out
+  anybuild.run/provider: staticfile
+  anybuild.run/version: 0.33.0
+  wasmer.io/version: 7.5.0

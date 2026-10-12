@@ -30,6 +30,19 @@ Drop-in browser script that overlays an image watermark on any web page using qu
 | `max-height` | No       | Maximum height for the image. Plain numbers are treated as pixels. Defaults to `240px`.         |
 | `margin`     | No       | CSS distance from the chosen edges. Accepts any CSS length. Defaults to `16px`.                 |
 | `id`         | No       | Optional element id if you need multiple independent watermarks on the same page.               |
+| `href`       | No       | Makes the watermark a link. Only `http(s)`, `mailto:` and relative URLs are accepted.           |
+| `target`     | No       | Where the link opens: `_blank` (default), `_self`, `_parent`, `_top`.                           |
+| `title`      | No       | Tooltip and accessible name for the link.                                                       |
+| `rel`        | No       | Link `rel`. Defaults to `noopener noreferrer`.                                                  |
+| `alt`        | No       | Alternative text for the image. Defaults to `Watermark`.                                        |
+
+### Clickable watermarks
+
+Add `href` and the image becomes a link (opens in a new tab by default). The overlay container stays `pointer-events: none`, so only the image itself catches clicks:
+
+```html
+<script src="https://watermark.wasmer.app/watermark.js?url=watermark.png&position=SE&href=https%3A%2F%2Fexample.com"></script>
+```
 
 ## Demo
 
@@ -38,7 +51,7 @@ Open `index.html` in a browser to view a mini guide plus live examples. Each ifr
 ## Notes
 
 - The script waits for `DOMContentLoaded` if necessary, so you can include it anywhere in the page head or body.
-- The watermark uses `pointer-events: none` to avoid intercepting clicks.
+- The watermark uses `pointer-events: none` to avoid intercepting clicks. With `href`, only the image is clickable.
 - On image load failure the script logs an error and removes the overlay.
 
 ## Development

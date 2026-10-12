@@ -269,6 +269,38 @@
         min-height: 2.7rem;
       }
 
+      .quick-start-link {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: 0.75rem 1rem;
+        align-items: end;
+        margin: 0;
+        padding: 1rem 1rem 0.75rem;
+        border: 1px solid #d7deea;
+        border-radius: 10px;
+        min-width: 0;
+      }
+      .quick-start-link legend {
+        padding: 0 0.4rem;
+        font-weight: 600;
+      }
+      .quick-start-link legend span {
+        font-weight: 400;
+        opacity: 0.7;
+      }
+      .quick-start-link .full-width {
+        grid-column: 1 / -1;
+      }
+      .quick-start-hint {
+        margin: 0;
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+      .quick-start-hint.is-invalid {
+        color: #b42318;
+        opacity: 1;
+      }
       .quick-start-submit {
         grid-column: 1 / -1;
         justify-self: start;
@@ -412,6 +444,10 @@
             Watermarks ignore pointer events so user interactions stay intact.
           </li>
           <li>
+            Optional <code>href</code> turns the watermark into a link. Only
+            the image is clickable; everything around it stays click-through.
+          </li>
+          <li>
             Optional background tint boosts readability on complex layouts.
           </li>
         </ul>
@@ -514,6 +550,76 @@
               value="page-demo"
             />
           </div>
+          <fieldset class="quick-start-link full-width">
+            <legend>Link <span>(optional, makes the watermark clickable)</span></legend>
+            <div class="quick-start-field full-width">
+              <label for="watermark-href">Link URL</label>
+              <input
+                id="watermark-href"
+                name="watermark-href"
+                type="url"
+                inputmode="url"
+                placeholder="https://example.com"
+                value=""
+                spellcheck="false"
+                autocomplete="off"
+              />
+            </div>
+            <div class="quick-start-field">
+              <label for="watermark-target">Opens in</label>
+              <select id="watermark-target" name="watermark-target">
+                <option value="_blank" selected>New tab (_blank)</option>
+                <option value="_self">Same tab (_self)</option>
+                <option value="_parent">Parent frame (_parent)</option>
+                <option value="_top">Top window (_top)</option>
+              </select>
+            </div>
+            <div class="quick-start-field">
+              <label for="watermark-rel">Rel</label>
+              <input
+                id="watermark-rel"
+                name="watermark-rel"
+                type="text"
+                list="watermark-rel-options"
+                placeholder="noopener noreferrer"
+                value="noopener noreferrer"
+                spellcheck="false"
+                autocomplete="off"
+              />
+              <datalist id="watermark-rel-options">
+                <option value="noopener noreferrer"></option>
+                <option value="noopener"></option>
+                <option value="nofollow noopener noreferrer"></option>
+                <option value="sponsored noopener noreferrer"></option>
+              </datalist>
+            </div>
+            <div class="quick-start-field">
+              <label for="watermark-title">Title (tooltip)</label>
+              <input
+                id="watermark-title"
+                name="watermark-title"
+                type="text"
+                placeholder="Visit example.com"
+                value=""
+                autocomplete="off"
+              />
+            </div>
+            <div class="quick-start-field">
+              <label for="watermark-alt">Alt text</label>
+              <input
+                id="watermark-alt"
+                name="watermark-alt"
+                type="text"
+                placeholder="Company logo"
+                value=""
+                autocomplete="off"
+              />
+            </div>
+            <p class="quick-start-hint full-width" id="watermark-href-hint">
+              Only <code>http(s)</code>, <code>mailto:</code> and relative links
+              are used; anything else is ignored by the script.
+            </p>
+          </fieldset>
           <button type="submit" class="quick-start-submit">
             Update examples
           </button>
@@ -610,6 +716,42 @@
                 multiple watermarks on the same page.
               </td>
             </tr>
+            <tr>
+              <td><code>href</code></td>
+              <td>URL</td>
+              <td>
+                Makes the watermark a link. Only <code>http(s)</code>,
+                <code>mailto:</code> and relative links are accepted. The image
+                becomes clickable; the rest of the overlay stays click-through.
+                Encode it with <code>encodeURIComponent</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>target</code></td>
+              <td>string</td>
+              <td>
+                Where the link opens: <code>_blank</code> (default),
+                <code>_self</code>, <code>_parent</code> or <code>_top</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td>string</td>
+              <td>Tooltip and accessible name for the link.</td>
+            </tr>
+            <tr>
+              <td><code>rel</code></td>
+              <td>string</td>
+              <td>
+                Link relationship. Defaults to
+                <code>noopener noreferrer</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>alt</code></td>
+              <td>string</td>
+              <td>Alternative text for the image. Defaults to <code>Watermark</code>.</td>
+            </tr>
           </tbody>
         </table>
       </section>
@@ -673,6 +815,22 @@
               srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=NW</h4><p>margin=32px, max-height=120, background=rgba(255,255,255,0.7)</p></main><script src="watermark.js?url=watermark.png&amp;position=NW&amp;margin=32px&amp;max-height=120&amp;background=rgba(255%2C255%2C255%2C0.7)&amp;id=demo-nw"></script></body></html>'
             ></iframe>
           </article>
+          <article class="demo-card">
+            <h3>Clickable Link</h3>
+            <p>Bottom-left, opens wasmer.io in a new tab when clicked.</p>
+            <iframe
+              title="Linked watermark"
+              class="demo-frame"
+              data-watermark-demo="true"
+              data-id="demo-link"
+              data-position="SW"
+              data-margin="16"
+              data-max-width="140"
+              data-href="https://wasmer.io"
+              data-description="margin=16, max-width=140, href=https://wasmer.io"
+              srcdoc='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><style>body{margin:0;font-family:sans-serif;background:#f8fafc;}main{padding:1.25rem;}p{margin-top:0.5rem;color:#475569;}</style></head><body><main><h4>position=SW</h4><p>margin=16, max-width=140, href=https://wasmer.io</p></main><script src="watermark.js?url=watermark.png&amp;position=SW&amp;margin=16&amp;max-width=140&amp;href=https%3A%2F%2Fwasmer.io&amp;id=demo-link"></script></body></html>'
+            ></iframe>
+          </article>
         </div>
       </section>
     </main>
@@ -695,6 +853,11 @@
           maxWidth: "220",
           maxHeight: "240",
           id: "page-demo",
+          href: "",
+          target: "_blank",
+          rel: "noopener noreferrer",
+          title: "",
+          alt: "",
         };
         const allowedPositions = new Set([
           "N",
@@ -711,6 +874,12 @@
 
         const form = document.getElementById("watermark-form");
         const urlInput = document.getElementById("watermark-url");
+        const hrefInput = document.getElementById("watermark-href");
+        const targetInput = document.getElementById("watermark-target");
+        const relInput = document.getElementById("watermark-rel");
+        const titleInput = document.getElementById("watermark-title");
+        const altInput = document.getElementById("watermark-alt");
+        const hrefHint = document.getElementById("watermark-href-hint");
         const positionInput = document.getElementById("watermark-position");
         const marginInput = document.getElementById("watermark-margin");
         const backgroundColorInput = document.getElementById(
@@ -732,6 +901,11 @@
         if (
           !form ||
           !urlInput ||
+          !hrefInput ||
+          !targetInput ||
+          !relInput ||
+          !titleInput ||
+          !altInput ||
           !positionInput ||
           !marginInput ||
           !backgroundColorInput ||
@@ -776,6 +950,44 @@
             return allowEmpty ? "" : fallback;
           }
           return trimmed;
+        }
+
+        // Mirrors watermark.js: only http(s), mailto: and relative links are honoured.
+        function sanitizeHref(value) {
+          const trimmed = String(value || "").trim();
+          if (!trimmed) {
+            hrefHint.classList.remove("is-invalid");
+            return "";
+          }
+          let ok = false;
+          try {
+            const url = new URL(trimmed, window.location.href);
+            ok = ["http:", "https:", "mailto:"].includes(url.protocol);
+          } catch (error) {
+            ok = false;
+          }
+          hrefHint.classList.toggle("is-invalid", !ok);
+          return ok ? trimmed : "";
+        }
+
+        function sanitizeTarget(value) {
+          return ["_blank", "_self", "_parent", "_top"].includes(value)
+            ? value
+            : defaults.target;
+        }
+
+        // Link parameters, omitting values that equal the script's defaults.
+        function linkEntries(values) {
+          const entries = [];
+          if (values.href) {
+            entries.push(["href", values.href]);
+            if (values.target && values.target !== defaults.target)
+              entries.push(["target", values.target]);
+            if (values.rel !== defaults.rel) entries.push(["rel", values.rel]);
+            if (values.title) entries.push(["title", values.title]);
+          }
+          if (values.alt) entries.push(["alt", values.alt]);
+          return entries;
         }
 
         function sanitizeId(value, fallback) {
@@ -877,6 +1089,11 @@
               true,
             ),
             id: sanitizeId(idInput.value, defaults.id),
+            href: sanitizeHref(hrefInput.value),
+            target: sanitizeTarget(targetInput.value),
+            rel: String(relInput.value || "").trim().replace(/\s+/g, " "),
+            title: String(titleInput.value || "").trim(),
+            alt: String(altInput.value || "").trim(),
           };
         }
 
@@ -889,6 +1106,11 @@
           maxWidthInput.value = values.maxWidth;
           maxHeightInput.value = values.maxHeight || "";
           idInput.value = values.id;
+          hrefInput.value = values.href || "";
+          targetInput.value = values.target || defaults.target;
+          relInput.value = values.rel;
+          titleInput.value = values.title || "";
+          altInput.value = values.alt || "";
         }
 
         function buildScriptSrc(imageUrl, entries) {
@@ -917,6 +1139,7 @@
           push("max-width", values.maxWidth);
           push("max-height", values.maxHeight);
           push("id", values.id);
+          linkEntries(values).forEach(([key, value]) => push(key, value));
           return entries;
         }
 
@@ -995,6 +1218,7 @@
               maxHeight,
               background,
               description,
+              href,
             } = frame.dataset;
             const resolvedPosition = position || values.position;
             const resolvedMargin = margin || values.margin;
@@ -1018,6 +1242,14 @@
               : background || values.background;
             if (resolvedBackground && resolvedBackground !== "transparent")
               params.push(["background", resolvedBackground]);
+            if (values.href) {
+              linkEntries(values).forEach((entry) => params.push(entry));
+            } else if (href) {
+              params.push(["href", href]);
+              if (values.alt) params.push(["alt", values.alt]);
+            } else if (values.alt) {
+              params.push(["alt", values.alt]);
+            }
             params.push(["id", frameId]);
 
             const scriptSrc = buildScriptSrc(values.url, params);
@@ -1040,6 +1272,7 @@
           }
           if (values.maxWidth) entries.push(["max-width", values.maxWidth]);
           if (values.maxHeight) entries.push(["max-height", values.maxHeight]);
+          linkEntries(values).forEach((entry) => entries.push(entry));
           entries.push(["id", overlayId]);
 
           const scriptSrc = buildScriptSrc(values.url, entries);
@@ -1135,6 +1368,11 @@
 
         const formControls = [
           urlInput,
+          hrefInput,
+          targetInput,
+          relInput,
+          titleInput,
+          altInput,
           positionInput,
           marginInput,
           backgroundColorInput,

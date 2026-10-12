@@ -1,6 +1,30 @@
 // Creates a configurable watermark overlay controlled via script query parameters.
+//
+//   <script src="https://watermark.wasmer.app/watermark.js?url=logo.png&position=SE"></script>
+//
+// Optional link: add href=https://example.com to make the watermark clickable
+// (only the image itself catches clicks; the rest of the page is untouched).
 (function () {
   const CONTAINER_ID = 'watermarkjs-container';
+
+  // Badges hosted next to this script. Paths are resolved against the script's own URL,
+  // so presets work from any page that embeds the script.
+  const PRESETS = {
+    'powered-by-wasmer': {
+      url: 'powered-by-wasmer.svg',
+      href: 'https://wasmer.io',
+      alt: 'Powered by Wasmer',
+      title: 'Powered by Wasmer',
+      'max-width': '120',
+    },
+    'powered-by-wasmer-light': {
+      url: 'powered-by-wasmer-light.svg',
+      href: 'https://wasmer.io',
+      alt: 'Powered by Wasmer',
+      title: 'Powered by Wasmer',
+      'max-width': '120',
+    },
+  };
 
   function parseSize(value, fallback) {
     if (value == null || value === '') return fallback;
@@ -88,6 +112,23 @@
     });
   }
 
+  // Only allow ordinary links. Blocks javascript:, data: and similar schemes, since the
+  // href arrives through a URL anyone could construct.
+  function safeHref(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return null;
+    try {
+      const url = new URL(raw, window.location.href);
+      if (url.protocol === 'http:' || url.protocol === 'https:' || url.protocol === 'mailto:') {
+        return url.href;
+      }
+    } catch (error) {
+      /* fall through */
+    }
+    console.warn(`[watermark] Ignoring link "${raw}": only http(s) and mailto links are allowed.`);
+    return null;
+  }
+
   function createWatermark(params) {
     const imageUrl = params.url;
     if (!imageUrl) {
@@ -107,6 +148,7 @@
     const maxWidth = parseSize(params['max-width'] || params.maxWidth, '240px');
     const maxHeight = parseSize(params['max-height'] || params.maxHeight, '240px');
     const background = (params.background || params['background-color'] || '').trim() || 'transparent';
+    const href = safeHref(params.href || params.link);
 
     const container = document.createElement('div');
     container.id = containerId;
@@ -133,18 +175,51 @@
       container.remove();
     });
 
-    container.appendChild(img);
+    if (href) {
+      // The container stays click-through; only the link (the image area) is clickable.
+      const link = document.createElement('a');
+      link.href = href;
+      const target = (params.target || '_blank').trim();
+      if (/^_(blank|self|parent|top)$/.test(target)) link.target = target;
+      link.rel = (params.rel || 'noopener noreferrer').trim();
+      if (params.title) link.title = params.title;
+      link.setAttribute('aria-label', params.title || params.alt || 'Watermark link');
+      link.style.pointerEvents = 'auto';
+      link.style.display = 'block';
+      link.style.cursor = 'pointer';
+      link.style.borderRadius = '6px';
+      link.style.outlineOffset = '3px';
+      link.style.transition = 'opacity .15s ease, transform .15s ease';
+      link.addEventListener('mouseenter', () => { link.style.opacity = '0.88'; });
+      link.addEventListener('mouseleave', () => { link.style.opacity = ''; });
+      link.appendChild(img);
+      container.appendChild(link);
+    } else {
+      container.appendChild(img);
+    }
+
     document.body.appendChild(container);
   }
 
   function parseParams(scriptEl) {
     try {
-      const { searchParams } = new URL(scriptEl.src);
-      const result = {};
-      searchParams.forEach((value, key) => {
-        result[key] = value;
+      const scriptUrl = new URL(scriptEl.src, window.location.href);
+      const given = {};
+      scriptUrl.searchParams.forEach((value, key) => {
+        given[key] = value;
       });
-      return result;
+
+      if (!given.preset) return given;
+
+      const preset = PRESETS[given.preset];
+      if (!preset) {
+        console.warn(`[watermark] Unknown preset "${given.preset}". Available: ${Object.keys(PRESETS).join(', ')}.`);
+        return given;
+      }
+      const merged = Object.assign({}, preset, given);
+      // Preset images live next to the script, whatever page embeds it.
+      if (!given.url) merged.url = new URL(preset.url, scriptUrl).href;
+      return merged;
     } catch (error) {
       console.error('[watermark] Unable to parse script parameters:', error);
       return {};
